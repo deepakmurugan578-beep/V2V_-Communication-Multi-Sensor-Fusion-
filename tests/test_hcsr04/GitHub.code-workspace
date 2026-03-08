@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../../../.."
+		},
+		{
+			"name": "test_hcsr04",
+			"path": "."
+		}
+	],
+	"settings": {}
+}
