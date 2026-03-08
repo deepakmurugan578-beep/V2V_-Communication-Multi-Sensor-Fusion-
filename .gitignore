@@ -1,41 +1,45 @@
-# Prerequisites
-*.d
+# ── PlatformIO ──
+.pio/
+.pioenvs/
+.piolibdeps/
+.piopm/
 
-# Compiled Object files
-*.slo
-*.lo
+# ── VS Code ──
+.vscode/
+
+# ── Build Files ──
 *.o
-*.obj
+*.d
+*.elf
+*.bin
+*.hex
+*.map
 
-# Precompiled Headers
-*.gch
-*.pch
+# ── Windows ──
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
 
-# Linker files
-*.ilk
+# ── Mac ──
+.DS_Store
+.AppleDouble
+.LSOverride
 
-# Debugger Files
-*.pdb
+# ── Python (PlatformIO uses Python) ──
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+env/
+venv/
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+# ── Logs ──
+*.log
+*.cache
 
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
-
-# debug information files
-*.dwo
+# ── NOT ignored (keep these) ──
+# platformio.ini  ← always keep
+# src/main.cpp    ← always keep
+# include/*.h     ← always keep
+```
