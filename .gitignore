@@ -1,13 +1,13 @@
-# ── PlatformIO ──
+# PlatformIO
 .pio/
 .pioenvs/
 .piolibdeps/
 .piopm/
 
-# ── VS Code ──
+# VS Code
 .vscode/
 
-# ── Build Files ──
+# Build Files
 *.o
 *.d
 *.elf
@@ -15,31 +15,14 @@
 *.hex
 *.map
 
-# ── Windows ──
+# Windows
 Thumbs.db
 desktop.ini
-$RECYCLE.BIN/
 
-# ── Mac ──
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# ── Python (PlatformIO uses Python) ──
-__pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-
-# ── Logs ──
+# Logs
 *.log
 *.cache
 
-# ── NOT ignored (keep these) ──
-# platformio.ini  ← always keep
-# src/main.cpp    ← always keep
-# include/*.h     ← always keep
-```
+# Python
+__pycache__/
+*.pyc
