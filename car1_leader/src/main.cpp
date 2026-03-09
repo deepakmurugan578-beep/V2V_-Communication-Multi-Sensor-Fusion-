@@ -284,7 +284,7 @@ void handleScenarios() {
     carData.direction      = 0;
     stopMotors();
     showAlert("!! CRASH !!");
-    Serial.println("💥 CRASH DETECTED!");
+    Serial.println(" CRASH DETECTED!");
     return;
   }
 
@@ -297,7 +297,7 @@ void handleScenarios() {
     carData.direction = 0;
     stopMotors();
     showAlert("COLLISION!");
-    Serial.println("🚨 COLLISION! STOP!");
+    Serial.println(" COLLISION! STOP!");
     return;
   }
 
@@ -307,7 +307,7 @@ void handleScenarios() {
     carData.speed     = SPEED_SLOW;
     carData.direction = 0;
     moveForward(SPEED_SLOW);
-    Serial.println("⚠️  DANGER → SLOW");
+    Serial.println("  DANGER → SLOW");
     return;
   }
 
@@ -317,7 +317,7 @@ void handleScenarios() {
     carData.speed     = SPEED_MEDIUM;
     carData.direction = 0;
     moveForward(SPEED_MEDIUM);
-    Serial.println("⚠️  WARNING → MEDIUM");
+    Serial.println(" WARNING → MEDIUM");
     return;
   }
 
@@ -362,23 +362,23 @@ void setup() {
     display.setCursor(0, 0);
     display.println("CAR1 BOOTING...");
     display.display();
-    Serial.println("✅ OLED OK");
+    Serial.println(" OLED OK");
   } else {
-    Serial.println("❌ OLED FAILED");
+    Serial.println(" OLED FAILED");
   }
 
   delay(500);
 
   if (mpuBegin()) {
     mpu_ok = true;
-    Serial.println("✅ MPU6050 OK");
+    Serial.println(" MPU6050 OK");
     if (oled_ok) {
       display.setCursor(0, 10);
       display.println("MPU6050 OK");
       display.display();
     }
   } else {
-    Serial.println("❌ MPU6050 FAILED");
+    Serial.println(" MPU6050 FAILED");
     if (oled_ok) {
       display.setCursor(0, 10);
       display.println("MPU6050 FAIL!");
@@ -397,14 +397,14 @@ void setup() {
     esp_now_register_send_cb(onSent);
     esp_now_add_peer(receiverMAC,
       ESP_NOW_ROLE_SLAVE, 1, NULL, 0);
-    Serial.println("✅ ESP-NOW OK");
+    Serial.println(" ESP-NOW OK");
     if (oled_ok) {
       display.setCursor(0, 20);
       display.println("ESP-NOW OK");
       display.display();
     }
   } else {
-    Serial.println("❌ ESP-NOW FAILED");
+    Serial.println(" ESP-NOW FAILED");
     if (oled_ok) {
       display.setCursor(0, 20);
       display.println("ESP-NOW FAIL!");
