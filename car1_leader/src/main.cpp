@@ -1,27 +1,3 @@
-/*
- * ╔══════════════════════════════════════════════════════╗
- * ║       V2V CAR1 LEADER — FINAL CLEAN CODE            ║
- * ║                                                      ║
- * ║  PIN MAP:                                            ║
- * ║  D1  → SCL  (MPU6050 + OLED)                        ║
- * ║  D2  → SDA  (MPU6050 + OLED)                        ║
- * ║  D3  → IN1  (Motor Left  forward)                   ║
- * ║  D4  → IN2  (Motor Left  backward)                  ║
- * ║  D5  → ECHO (HC-SR04 via 1kΩ+1kΩ divider)          ║
- * ║  D6  → TRIG (HC-SR04)                               ║
- * ║  D7  → IN3  (Motor Right forward)                   ║
- * ║  D8  → IN4  (Motor Right backward)                  ║
- * ║  D0  → ENA  (Left  speed PWM)                       ║
- * ║  RX  → ENB  (Right speed PWM)                       ║
- * ║  TX  → FREE (Serial Monitor works!) ✅              ║
- * ║                                                      ║
- * ║  ⚠️  Disconnect RX wire before uploading!           ║
- * ║  ⚠️  Reconnect RX after uploading!                  ║
- * ║                                                      ║
- * ║  Removed: IR sensor, RGB LEDs, Buzzer               ║
- * ║  OLED handles all alerts visually                   ║
- * ╚══════════════════════════════════════════════════════╝
- */
 
 #include <Arduino.h>
 #include <Wire.h>
@@ -30,9 +6,7 @@
 #include <ESP8266WiFi.h>
 #include <espnow.h>
 
-// ════════════════════════════════════════
-//  PIN DEFINITIONS
-// ════════════════════════════════════════
+
 #define SCL_PIN   D1
 #define SDA_PIN   D2
 #define IN1       D3
@@ -42,70 +16,60 @@
 #define IN3       D7
 #define IN4       D8
 #define ENA       D0
-#define ENB       3     // RX = GPIO3
+#define ENB       3    
 
-// ════════════════════════════════════════
-//  CONSTANTS
-// ════════════════════════════════════════
 #define SPEED_STOP    0
 #define SPEED_SLOW    80
 #define SPEED_MEDIUM  160
 #define SPEED_FAST    220
 
-#define DIST_CRITICAL  11   // cm → emergency stop
-#define DIST_DANGER    20   // cm → slow down
-#define DIST_WARNING   50   // cm → medium speed
+#define DIST_CRITICAL  11   
+#define DIST_DANGER    20 
+#define DIST_WARNING   50   
 
-#define CRASH_THRESHOLD 12000  // MPU raw spike
+#define CRASH_THRESHOLD 12000  
 
 #define SCREEN_WIDTH  128
 #define SCREEN_HEIGHT  64
 
-// ════════════════════════════════════════
-//  OLED
-// ════════════════════════════════════════
+
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT,
                           &Wire, -1);
 
-// ════════════════════════════════════════
-//  ESP-NOW DATA PACKET
-//  !! Must match Car2 exactly !!
-// ════════════════════════════════════════
+
 struct V2VData {
-  uint8_t  vehicle_id;      // 1 = Car1
-  uint8_t  msg_type;        // 1=normal 2=warning 3=emergency
-  uint32_t timestamp;       // millis()
-  // MPU6050
+  uint8_t  vehicle_id;     
+  uint8_t  msg_type;        
+  uint32_t timestamp;       
+
   int16_t  ax, ay, az;
   int16_t  gx, gy, gz;
   float    tilt_angle;
   bool     crash_detected;
-  // HC-SR04
+  
   uint16_t distance_cm;
-  uint8_t  distance_zone;   // 0=safe 1=warn 2=danger 3=critical
+  uint8_t  distance_zone;   
   bool     obstacle_near;
-  // Motors
+
+ 
   uint8_t  speed;
-  int8_t   direction;       // -1=left 0=forward 1=right
+  int8_t   direction;     
   bool     braking;
   bool     reversing;
-  // Flags
   bool     platoon_active;
   bool     emergency;
 };
 
 V2VData carData;
 
-// !! Replace with YOUR Car2 MAC address !!
+
 uint8_t receiverMAC[] = {0xC8, 0xC9, 0xA3, 0x66, 0x97, 0xD1};
 
 bool espnow_ok = false;
 bool mpu_ok    = false;
 bool oled_ok   = false;
 
-// ════════════════════════════════════════
-//  MPU6050 — DIRECT I2C
-// ════════════════════════════════════════
+
 #define MPU_ADDR 0x68
 
 void mpuWrite(byte reg, byte val) {
@@ -152,9 +116,7 @@ void readMPU() {
     (float)carData.az) * 180.0 / PI;
 }
 
-// ════════════════════════════════════════
-//  HC-SR04
-// ════════════════════════════════════════
+
 float readDistance() {
   digitalWrite(TRIG_PIN, LOW);
   delayMicroseconds(2);
@@ -174,9 +136,6 @@ uint8_t getDistanceZone(float cm) {
   return 0;
 }
 
-// ════════════════════════════════════════
-//  MOTORS
-// ════════════════════════════════════════
 void stopMotors() {
   digitalWrite(IN1, LOW);
   digitalWrite(IN2, LOW);
@@ -213,9 +172,7 @@ void turnRight(int spd) {
   setMotors(1, 0, 1, 0, spd, spd / 2);
 }
 
-// ════════════════════════════════════════
-//  OLED DISPLAY
-// ════════════════════════════════════════
+//
 String       alertMsg  = "";
 unsigned long alertTime = 0;
 #define ALERT_DURATION 1500
@@ -230,7 +187,6 @@ void updateOLED() {
   display.clearDisplay();
   display.setTextColor(SSD1306_WHITE);
 
-  // ── Alert overlay ──
   if (alertMsg != "" &&
       millis() - alertTime < ALERT_DURATION) {
     display.setTextSize(2);
@@ -241,10 +197,9 @@ void updateOLED() {
   }
   alertMsg = "";
 
-  // ── Normal screen ──
   display.setTextSize(1);
 
-  // Header
+  
   display.setCursor(0, 0);
   display.print("V2V CAR1");
   display.setCursor(72, 0);
@@ -304,27 +259,22 @@ void updateOLED() {
   display.display();
 }
 
-// ════════════════════════════════════════
-//  ESP-NOW SEND CALLBACK
-// ════════════════════════════════════════
+
 void onSent(uint8_t *mac, uint8_t status) {
   espnow_ok = (status == 0);
 }
 
-// ════════════════════════════════════════
-//  SCENARIO LOGIC
-// ════════════════════════════════════════
+
 void handleScenarios() {
 
-  // Reset flags
+  
   carData.emergency      = false;
   carData.crash_detected = false;
   carData.braking        = false;
   carData.reversing      = false;
   carData.msg_type       = 1;
 
-  // ── Scenario 3: Crash Detection ──
-  // Highest priority!
+  
   if (abs(carData.ax) > CRASH_THRESHOLD ||
       abs(carData.ay) > CRASH_THRESHOLD) {
     carData.crash_detected = true;
@@ -338,7 +288,7 @@ void handleScenarios() {
     return;
   }
 
-  // ── Scenario 1: Forward Collision ──
+  
   if (carData.distance_zone == 3) {
     carData.emergency = true;
     carData.braking   = true;
@@ -351,7 +301,7 @@ void handleScenarios() {
     return;
   }
 
-  // ── Scenario 2: Danger Zone ──
+  
   if (carData.distance_zone == 2) {
     carData.msg_type  = 2;
     carData.speed     = SPEED_SLOW;
@@ -361,7 +311,7 @@ void handleScenarios() {
     return;
   }
 
-  // ── Scenario 2: Warning Zone ──
+ 
   if (carData.distance_zone == 1) {
     carData.msg_type  = 2;
     carData.speed     = SPEED_MEDIUM;
@@ -371,7 +321,7 @@ void handleScenarios() {
     return;
   }
 
-  // ── Scenario 5: Platoon Normal ──
+  
   carData.platoon_active = true;
   carData.msg_type       = 1;
   carData.speed          = SPEED_FAST;
@@ -379,33 +329,31 @@ void handleScenarios() {
   moveForward(SPEED_FAST);
 }
 
-// ════════════════════════════════════════
-//  SETUP
-// ════════════════════════════════════════
+
 void setup() {
   Serial.begin(115200);
   delay(1000);
   Serial.println("\n\n=== CAR1 LEADER BOOTING ===");
 
-  // ── Motor pins ──
+  
   pinMode(IN1, OUTPUT); pinMode(IN2, OUTPUT);
   pinMode(IN3, OUTPUT); pinMode(IN4, OUTPUT);
   pinMode(ENA, OUTPUT); pinMode(ENB, OUTPUT);
   stopMotors();
 
-  // ── HC-SR04 pins ──
+  
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
   digitalWrite(TRIG_PIN, LOW);
 
-  // ── I2C ──
+  
   pinMode(SDA_PIN, INPUT_PULLUP);
   pinMode(SCL_PIN, INPUT_PULLUP);
   Wire.begin(SDA_PIN, SCL_PIN);
   Wire.setClock(100000);
   delay(100);
 
-  // ── OLED ──
+ 
   if (display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
     oled_ok = true;
     display.clearDisplay();
@@ -421,7 +369,6 @@ void setup() {
 
   delay(500);
 
-  // ── MPU6050 ──
   if (mpuBegin()) {
     mpu_ok = true;
     Serial.println("✅ MPU6050 OK");
@@ -490,9 +437,7 @@ void setup() {
   Serial.println("=== CAR1 READY ===\n");
 }
 
-// ════════════════════════════════════════
-//  LOOP
-// ════════════════════════════════════════
+
 void loop() {
 
   // ── 1. Read MPU6050 ──
