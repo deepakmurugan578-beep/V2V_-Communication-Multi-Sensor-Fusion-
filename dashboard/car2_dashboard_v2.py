@@ -1,12 +1,3 @@
-"""
-╔══════════════════════════════════════════════════════════╗
-║         V2V CAR2 FOLLOWER — EXPERT LIVE DASHBOARD       ║
-║                                                          ║
-║  Run: python car2_dashboard.py                          ║
-║  Change COM_PORT below if needed                        ║
-╚══════════════════════════════════════════════════════════╝
-"""
-
 import serial
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches

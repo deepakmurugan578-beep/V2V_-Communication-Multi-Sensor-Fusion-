@@ -1,15 +1,3 @@
-"""
-╔══════════════════════════════════════════════════════════╗
-║         V2V CAR1 LEADER — LIVE PYTHON DASHBOARD         ║
-║                                                          ║
-║  Serial format expected from Car1:                      ║
-║  /*DIST,ZONE,TILT,SPD,DIR,MSG,CRASH,BRAKE,LINK*/        ║
-║                                                          ║
-║  Run: python car1_dashboard.py                          ║
-║  Change COM_PORT below if needed                        ║
-╚══════════════════════════════════════════════════════════╝
-"""
-
 import serial
 import serial.tools.list_ports
 import matplotlib.pyplot as plt
@@ -22,22 +10,16 @@ import threading
 import time
 from collections import deque
 
-# ════════════════════════════════════════
-#  CONFIG — change COM_PORT if needed
-# ════════════════════════════════════════
+
 COM_PORT   = "COM3"
 BAUD_RATE  = 115200
 MAX_POINTS = 100
 
-# ════════════════════════════════════════
-#  COLOR THEME — Red/Orange Leader theme
-#  (different from Car2 cyan/green theme)
-# ════════════════════════════════════════
+
 BG          = "#080A0F"
 CARD        = "#0D1018"
 CARD2       = "#111520"
 BORDER      = "#1E2535"
-# Car1 accent colors — warm/aggressive
 ORANGE      = "#FF6B2B"
 ORANGE_DIM  = "#3A1800"
 YELLOW      = "#FFD60A"
