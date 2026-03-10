@@ -483,6 +483,19 @@ void loop() {
     carData.msg_type,
     espnow_ok ? "OK" : "WAIT"
   );
+  
+  Serial.printf(
+  "/*%d,%d,%.1f,%d,%d,%d,%d,%d,%d*/\n",
+  carData.distance_cm,       // 1 Distance cm
+  carData.distance_zone,     // 2 Zone 0-3
+  carData.tilt_angle,        // 3 Tilt degrees
+  carData.speed,             // 4 Speed 0-255
+  carData.direction,         // 5 Direction -1,0,1
+  carData.msg_type,          // 6 Message 1-3
+  (int)carData.crash_detected, // 7 Crash 0/1
+  (int)carData.braking,      // 8 Braking 0/1
+  (int)espnow_ok             // 9 Link 0/1
+);
 
   delay(100);
 }
