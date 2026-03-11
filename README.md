@@ -3,12 +3,12 @@
 <br/>
 
 ```
-██╗   ██╗██████╗ ██╗   ██╗    ███████╗███████╗██████╗
-██║   ██║╚════██╗██║   ██║    ██╔════╝██╔════╝██╔══██╗
-██║   ██║ █████╔╝██║   ██║    █████╗  ███████╗██████╔╝
-╚██╗ ██╔╝██╔═══╝ ╚██╗ ██╔╝    ██╔══╝  ╚════██║██╔═══╝
- ╚████╔╝ ███████╗ ╚████╔╝     ███████╗███████║██║
-  ╚═══╝  ╚══════╝  ╚═══╝      ╚══════╝╚══════╝╚═╝
+       ██╗   ██╗██████╗ ██╗   ██╗    ███████╗███████╗██████╗
+       ██║   ██║╚════██╗██║   ██║    ██╔════╝██╔════╝██╔══██╗
+       ██║   ██║ █████╔╝██║   ██║    █████╗  ███████╗██████╔╝
+       ╚██╗ ██╔╝██╔═══╝ ╚██╗ ██╔╝    ██╔══╝  ╚════██║██╔═══╝
+        ╚████╔╝ ███████╗ ╚████╔╝     ███████╗███████║██║
+         ╚═══╝  ╚══════╝  ╚═══╝      ╚══════╝╚══════╝╚═╝
 ```
 
 # V2V Multi-Sensor Fusion Communication System
@@ -124,7 +124,7 @@ Modern autonomous vehicles rely on **Vehicle-to-Vehicle (V2V) communication** to
 
 ##  Hardware Components
 
-### Car 1 — Leader (4-Wheel Drive)
+### Car 1 —  (4-Wheel Drive)
 
 | Component | Model | Specification | Purpose |
 |-----------|-------|---------------|---------|
@@ -135,9 +135,10 @@ Modern autonomous vehicles rely on **Vehicle-to-Vehicle (V2V) communication** to
 | Motor Driver | L298N | 2A, 12V | 4-motor PWM control |
 | Motors | DC Gear Motor | 6V, 200RPM | 4WD chassis drive |
 | Power Board | V2 (3.3/5/12V) | Regulated outputs | Clean power distribution |
+|TOF|VL53L0X|V2|Precise distance cal|
 | Chassis | 4WD Platform | Acrylic | Mechanical base |
 
-### Car 2 — Follower (2-Wheel Drive)
+### Car 2 — (2-Wheel Drive)
 
 | Component | Model | Specification | Purpose |
 |-----------|-------|---------------|---------|
@@ -157,7 +158,7 @@ Modern autonomous vehicles rely on **Vehicle-to-Vehicle (V2V) communication** to
 
 ##  Pin Maps
 
-### Car 1 — Leader
+### Car 1 
 
 ```
 ESP8266 NodeMCU                    Connected To
@@ -184,7 +185,7 @@ POWER (Power Board V2):
   GND   ──▶  ALL components common ground rail
 ```
 
-### Car 2 — Follower
+### Car 2
 
 ```
 ESP8266 NodeMCU                    Connected To
@@ -666,7 +667,7 @@ Built from scratch — component testing through full bidirectional integration
 
 ---
 
-*This project was developed as a portfolio demonstration of real-time embedded communication,*
+*This project was developed as a  demonstration of real-time embedded communication,*
 *multi-sensor fusion, and autonomous vehicle systems engineering.*
 
 <br/>
