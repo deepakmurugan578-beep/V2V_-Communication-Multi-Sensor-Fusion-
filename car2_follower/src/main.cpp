@@ -5,29 +5,22 @@
 #include <ESP8266WiFi.h>
 #include <espnow.h>
 
-// ════════════════════════════════════════
-//  PIN DEFINITIONS
-// ════════════════════════════════════════
-#define SCL_PIN      D1    // GPIO5
-#define SDA_PIN      D2    // GPIO4
-#define IN1_PIN      D3    // GPIO0
-#define IN2_PIN      D4    // GPIO2
-#define IN3_PIN      D5    // GPIO14
-#define IN4_PIN      D6    // GPIO12
-#define ENA_PIN      D7    // GPIO13
-#define ENB_PIN      D8    // GPIO15
-#define IR_FL_PIN    D0    // GPIO16 — IR Front Left
-// A0 = IR Front Right — analog pin read as digital
-// No boot conflict! No INPUT_PULLUP needed!
-#define BUZZER_PIN   1     // GPIO1 = TX pin
 
-// A0 threshold — IR sensor output is digital 0/1
-// analogRead(A0) < threshold = LOW = obstacle
+#define SCL_PIN      D1    
+#define SDA_PIN      D2    
+#define IN1_PIN      D3    
+#define IN2_PIN      D4    
+#define IN3_PIN      D5    
+#define IN4_PIN      D6    
+#define ENA_PIN      D7    
+#define ENB_PIN      D8    
+#define IR_FL_PIN    D0    
+
+#define BUZZER_PIN   1    
+
+
 #define A0_THRESHOLD 512
 
-// ════════════════════════════════════════
-//  CONSTANTS
-// ════════════════════════════════════════
 #define SPEED_STOP       0
 #define SPEED_SLOW       80
 #define SPEED_MEDIUM     160
@@ -39,15 +32,10 @@
 #define ALERT_DURATION   1500
 #define LOOP_DELAY       100
 
-// ════════════════════════════════════════
-//  OLED
-// ════════════════════════════════════════
+
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT,
                           &Wire, -1);
 
-// ════════════════════════════════════════
-//  ESP-NOW PACKET — must match Car1!
-// ════════════════════════════════════════
 struct V2VData {
   uint8_t  vehicle_id;
   uint8_t  msg_type;        // 1=normal 2=warning 3=emergency
@@ -71,9 +59,7 @@ V2VData       car1Data;
 unsigned long lastReceived = 0;
 bool          dataReceived = false;
 
-// ════════════════════════════════════════
-//  CAR2 LOCAL STATE
-// ════════════════════════════════════════
+
 bool     ir_fl        = false;   // IR Front Left  (D0)
 bool     ir_fr        = false;   // IR Front Right (A0)
 float    car2_tilt    = 0.0;
@@ -93,9 +79,7 @@ bool     oled_ok      = false;
 String        alertMsg  = "";
 unsigned long alertTime = 0;
 
-// ════════════════════════════════════════
-//  MPU6050 — DIRECT I2C (no Adafruit lib)
-// ════════════════════════════════════════
+
 #define MPU_ADDR 0x68
 
 void mpuWrite(uint8_t reg, uint8_t val) {
@@ -144,22 +128,16 @@ void readMPU() {
                 abs(car2_ay) > CRASH_THRESHOLD);
 }
 
-// ════════════════════════════════════════
-//  IR SENSORS
-// ════════════════════════════════════════
+
 void readIR() {
   // D0 — normal digital read
   ir_fl = (digitalRead(IR_FL_PIN) == LOW);
 
-  // A0 — analog pin read as digital
-  // IR sensor output: LOW = obstacle detected
-  // analogRead < 512 means LOW (obstacle)
+  
   ir_fr = (analogRead(A0) < A0_THRESHOLD);
 }
 
-// ════════════════════════════════════════
-//  BUZZER — non-blocking timer
-// ════════════════════════════════════════
+
 unsigned long buzzEnd    = 0;
 bool          buzzActive = false;
 
@@ -180,9 +158,7 @@ void beepShort()  { if (!buzzActive) buzzStart(150); }
 void beepMedium() { if (!buzzActive) buzzStart(400); }
 void beepLong()   { if (!buzzActive) buzzStart(900); }
 
-// ════════════════════════════════════════
-//  MOTORS
-// ════════════════════════════════════════
+
 void stopMotors() {
   digitalWrite(IN1_PIN, LOW);
   digitalWrite(IN2_PIN, LOW);
@@ -225,9 +201,7 @@ void turnRight(int spd) {
   car2_dir = 1;
 }
 
-// ════════════════════════════════════════
-//  OLED
-// ════════════════════════════════════════
+
 void showAlert(const char* msg) {
   alertMsg  = String(msg);
   alertTime = millis();
@@ -254,14 +228,14 @@ void updateOLED() {
                  (unsigned long)CONN_TIMEOUT);
   display.setTextSize(1);
 
-  // Header
+  
   display.setCursor(0, 0);
   display.print("V2V CAR2");
   display.setCursor(72, 0);
   display.println(linked ? "[FOLLOW]" : "[WAIT..]");
   display.drawLine(0, 9, 128, 9, SSD1306_WHITE);
 
-  // Car1 data
+  
   display.setCursor(0, 12);
   if (linked) {
     display.printf("C1 D:%3dcm Z:%d S:%d",
@@ -272,7 +246,7 @@ void updateOLED() {
     display.print("C1: NO SIGNAL    ");
   }
 
-  // Car1 status
+  
   display.setCursor(0, 22);
   if (!linked)
     display.print("C1: WAITING...    ");
@@ -317,11 +291,7 @@ void updateOLED() {
   display.display();
 }
 
-// ════════════════════════════════════════
-//  SERIAL STUDIO OUTPUT
-//  /*LINK,C1DIST,C1ZONE,C1SPD,FL,FR,
-//    TILT,C2SPD,CRASH,EMRG,BRAKE*/
-// ════════════════════════════════════════
+
 void serialStudioOutput() {
   bool linked = ((millis() - lastReceived) <
                  (unsigned long)CONN_TIMEOUT);
@@ -341,9 +311,7 @@ void serialStudioOutput() {
   );
 }
 
-// ════════════════════════════════════════
-//  ESP-NOW RECEIVE
-// ════════════════════════════════════════
+
 void onDataReceived(uint8_t *mac,
                     uint8_t *inData,
                     uint8_t  len) {
@@ -354,9 +322,7 @@ void onDataReceived(uint8_t *mac,
   }
 }
 
-// ════════════════════════════════════════
-//  FOLLOW LOGIC
-// ════════════════════════════════════════
+
 void handleFollowLogic() {
   bool linked = ((millis() - lastReceived) <
                  (unsigned long)CONN_TIMEOUT);
@@ -435,9 +401,7 @@ void handleFollowLogic() {
   }
 }
 
-// ════════════════════════════════════════
-//  SETUP
-// ════════════════════════════════════════
+
 void setup() {
   Serial.begin(115200);
   delay(500);
@@ -455,10 +419,7 @@ void setup() {
 
   // IR Front Left — normal digital pin
   pinMode(IR_FL_PIN, INPUT_PULLUP);
-  // IR Front Right — A0 analog pin
-  // No pinMode needed for analogRead on A0
-
-  // I2C
+  
   pinMode(SDA_PIN, INPUT_PULLUP);
   pinMode(SCL_PIN, INPUT_PULLUP);
   Wire.begin(SDA_PIN, SCL_PIN);
@@ -553,9 +514,7 @@ void setup() {
   delay(100);
 }
 
-// ════════════════════════════════════════
-//  LOOP
-// ════════════════════════════════════════
+
 void loop() {
 
   // 1. Read MPU6050
