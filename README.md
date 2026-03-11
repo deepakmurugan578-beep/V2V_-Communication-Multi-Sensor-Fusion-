@@ -3,21 +3,12 @@
 <br/>
 
 ```
-<<<<<<< HEAD
-       ██╗   ██╗██████╗ ██╗   ██╗    ███████╗███████╗██████╗
-       ██║   ██║╚════██╗██║   ██║    ██╔════╝██╔════╝██╔══██╗
-       ██║   ██║ █████╔╝██║   ██║    █████╗  ███████╗██████╔╝
-       ╚██╗ ██╔╝██╔═══╝ ╚██╗ ██╔╝    ██╔══╝  ╚════██║██╔═══╝
-        ╚████╔╝ ███████╗ ╚████╔╝     ███████╗███████║██║
-         ╚═══╝  ╚══════╝  ╚═══╝      ╚══════╝╚══════╝╚═╝
-=======
                                   ██╗   ██╗██████╗ ██╗   ██╗   
                                   ██║   ██║╚════██╗██║   ██║    
                                   ██║   ██║ █████╔╝██║   ██║   
                                   ╚██╗ ██╔╝██╔═══╝ ╚██╗ ██╔╝   
                                    ╚████╔╝ ███████╗ ╚████╔╝    
                                     ╚═══╝  ╚══════╝  ╚═══╝     
->>>>>>> 07338ea0daa62cd4a166346d3483aa8157aa6346
 ```
 
 # V2V Multi-Sensor Fusion Communication System
@@ -145,14 +136,9 @@ Modern autonomous vehicles rely on **Vehicle-to-Vehicle (V2V) communication** to
 | Motor Driver | L298N | 2A, 12V | 4-motor PWM control |
 | Motors | DC Gear Motor | 6V, 200RPM | 4WD chassis drive |
 | Power Board | V2 (3.3/5/12V) | Regulated outputs | Clean power distribution |
-|TOF|VL53L0X|V2|Precise distance cal|
 | Chassis | 4WD Platform | Acrylic | Mechanical base |
 
-<<<<<<< HEAD
-### Car 2 — (2-Wheel Drive)
-=======
 ### Car 2 —  (2-Wheel Drive)
->>>>>>> 07338ea0daa62cd4a166346d3483aa8157aa6346
 
 | Component | Model | Specification | Purpose |
 |-----------|-------|---------------|---------|
@@ -199,11 +185,7 @@ POWER (Power Board V2):
   GND   ──▶  ALL components common ground rail
 ```
 
-<<<<<<< HEAD
-### Car 2
-=======
 ### Car 2 
->>>>>>> 07338ea0daa62cd4a166346d3483aa8157aa6346
 
 ```
 ESP8266 NodeMCU                    Connected To
@@ -711,3 +693,4 @@ Built from scratch — component testing through full bidirectional integration
 *Built with ESP8266 · ESP-NOW · PlatformIO · Python*
 
 </div>
+
